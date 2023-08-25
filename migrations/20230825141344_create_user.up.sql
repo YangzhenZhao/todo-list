@@ -1,7 +1,7 @@
 CREATE TABLE `user` (
     `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `email` varchar(128) NOT NULL,
-    `passwrod` varchar(128) NOT NULL,
+    `password` varchar(128) NOT NULL,
     `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `deleted_at` datetime DEFAULT NULL,

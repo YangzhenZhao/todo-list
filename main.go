@@ -1,7 +1,12 @@
 package main
 
-import "github.com/YangzhenZhao/todo-list/models"
+import (
+	"github.com/YangzhenZhao/todo-list/dao"
+	"github.com/YangzhenZhao/todo-list/router"
+)
 
 func main() {
-	models.Init()
+	dao.Init()
+	router.InitRouters()
+	router.Run()
 }
