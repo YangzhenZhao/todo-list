@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
 
 	"github.com/YangzhenZhao/todo-list/dto"
@@ -11,21 +9,37 @@ import (
 )
 
 func Register(c *gin.Context) {
-	body, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		return
-	}
 	registerReq := &dto.RegisterRequest{}
-	err = json.Unmarshal(body, registerReq)
-	log.Printf("register request... body: %s", string(body))
-	if err != nil {
+	if err := unmarshalRequest(c, registerReq); err != nil {
 		log.Printf("register request... err: %v\n", err)
+		invalidArgumentResponse(c, "注册参数不合法")
 		return
 	}
-	log.Printf("register request... email:%s, password:%s\n", registerReq.Email, registerReq.Password)
-	err = user.CreateUser(registerReq.Email, registerReq.Password)
+
+	err := user.CreateUser(registerReq.Email, registerReq.Password)
 	if err != nil {
 		log.Printf("[Register] create user err: %v\n", err)
+		c.JSON(400, err.Error())
+		return
 	}
-	c.JSON(200, "")
+	successResponse(c, "", "注册成功")
+}
+
+func Login(c *gin.Context) {
+	loginReq := &dto.LoginRequest{}
+	if err := unmarshalRequest(c, loginReq); err != nil {
+		log.Printf("login request... err: %v\n", err)
+		invalidArgumentResponse(c, "登录参数不合法")
+		return
+	}
+
+	userID, err := user.Login(loginReq)
+	if err != nil {
+		invalidArgumentResponse(c, "账号或密码不正确")
+		return
+	}
+	res := &dto.LoginResponse{
+		UserID: userID,
+	}
+	successResponse(c, res.JsonDumps(), "登录成功")
 }

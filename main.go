@@ -8,5 +8,6 @@ import (
 func main() {
 	dao.Init()
 	router.InitRouters()
+
 	router.Run()
 }

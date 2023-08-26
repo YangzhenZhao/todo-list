@@ -9,4 +9,5 @@ func addUserRouters(rg *gin.RouterGroup) {
 	users := rg.Group("/user")
 
 	users.POST("/register", controller.Register)
+	users.POST("/login", controller.Login)
 }
