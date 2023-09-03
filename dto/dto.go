@@ -13,7 +13,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserID uint `json:"userID"`
+	UserID uint   `json:"userID"`
+	Token  string `json:"token"`
 }
 
 func (res *LoginResponse) JsonDumps() string {

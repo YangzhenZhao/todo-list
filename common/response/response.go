@@ -1,4 +1,4 @@
-package controller
+package response
 
 import (
 	"net/http"
@@ -8,6 +8,7 @@ import (
 
 const (
 	reasonInvalidArgument = "invalid_argument"
+	reasonUnauthorized    = "unauthorized"
 )
 
 type response struct {
@@ -17,7 +18,7 @@ type response struct {
 	Message string `json:"message"`
 }
 
-func successResponse(c *gin.Context, data string, message string) {
+func SuccessResponse(c *gin.Context, data string, message string) {
 	obj := &response{
 		Success: true,
 		Data:    data,
@@ -26,7 +27,7 @@ func successResponse(c *gin.Context, data string, message string) {
 	c.JSON(http.StatusOK, obj)
 }
 
-func invalidArgumentResponse(c *gin.Context, message string) {
+func InvalidArgumentResponse(c *gin.Context, message string) {
 	obj := &response{
 		Success: false,
 		Data:    "",
@@ -34,4 +35,14 @@ func invalidArgumentResponse(c *gin.Context, message string) {
 		Message: message,
 	}
 	c.JSON(http.StatusBadRequest, obj)
+}
+
+func UnauthorizedResponse(c *gin.Context, message string) {
+	obj := &response{
+		Success: false,
+		Data:    "",
+		Reason:  reasonUnauthorized,
+		Message: message,
+	}
+	c.JSON(http.StatusUnauthorized, obj)
 }
