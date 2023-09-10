@@ -18,7 +18,7 @@ func Login(loginReq *dto.LoginRequest) (*dto.LoginResponse, error) {
 		return nil, err
 	}
 
-	token, err := common.GenerateSignedJWT(user.Email)
+	token, err := common.GenerateSignedJWT(user.ID)
 	if err != nil {
 		return nil, err
 	}

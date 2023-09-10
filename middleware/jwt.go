@@ -33,7 +33,7 @@ func AuthJWTMiddleware(c *gin.Context) {
 		return
 	}
 
-	c.Set("email", claims.Email)
+	c.Set("userID", claims.UserID)
 }
 
 func parseToken(tokenString string) (*dto.MyCustomClaims, error) {

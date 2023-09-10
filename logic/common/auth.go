@@ -10,9 +10,9 @@ import (
 
 const tokenTTLInDay = 20 * 24 * time.Hour
 
-func GenerateSignedJWT(email string) (string, error) {
+func GenerateSignedJWT(userID uint) (string, error) {
 	claims := dto.MyCustomClaims{
-		Email: email,
+		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenTTLInDay)),
 			Issuer:    "project",
