@@ -10,7 +10,7 @@ func addTodoRouters(rg *gin.RouterGroup) {
 	users := rg.Group("/todo")
 
 	users.GET("", middleware.AuthJWTMiddleware, controller.GetTodo)
-	users.POST("", middleware.AuthJWTMiddleware, controller.InsertTodo)
+	users.POST("", middleware.AuthJWTMiddleware, controller.CreateTodo)
 	users.PUT("", middleware.AuthJWTMiddleware, controller.UpdateTodo)
 	users.DELETE("", middleware.AuthJWTMiddleware, controller.DeleteTodo)
 }
