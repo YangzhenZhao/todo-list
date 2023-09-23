@@ -15,4 +15,5 @@ func Init() {
 		panic("数据库连接失败!")
 	}
 	UserDao = NewUserDao(db)
+	TodoDao = NewTodoDao(db)
 }

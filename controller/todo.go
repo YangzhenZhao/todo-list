@@ -5,6 +5,7 @@ import (
 
 	"github.com/YangzhenZhao/todo-list/common/response"
 	"github.com/YangzhenZhao/todo-list/dto"
+	"github.com/YangzhenZhao/todo-list/logic/todo"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +34,15 @@ func CreateTodo(c *gin.Context) {
 	}
 
 	log.Printf("[CreateTodo] req: %s\n", spew.Sdump(createReq))
+
+	err := todo.CreateTodo(createReq)
+	if err != nil {
+		response.InternalServerErrorResponse(c, err.Error())
+		log.Printf("createTodo internal server error: %v\n", err)
+		return
+	}
+
+	response.SuccessResponse(c, "", "创建成功")
 }
 
 func UpdateTodo(c *gin.Context) {

@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	reasonInvalidArgument = "invalid_argument"
-	reasonUnauthorized    = "unauthorized"
+	reasonInvalidArgument     = "invalid_argument"
+	reasonUnauthorized        = "unauthorized"
+	reasonInternalServerError = "internall_server_error"
 )
 
 type response struct {
@@ -35,6 +36,16 @@ func InvalidArgumentResponse(c *gin.Context, message string) {
 		Message: message,
 	}
 	c.JSON(http.StatusBadRequest, obj)
+}
+
+func InternalServerErrorResponse(c *gin.Context, message string) {
+	obj := &response{
+		Success: false,
+		Data:    "",
+		Reason:  reasonInternalServerError,
+		Message: message,
+	}
+	c.JSON(http.StatusInternalServerError, obj)
 }
 
 func UnauthorizedResponse(c *gin.Context, message string) {
