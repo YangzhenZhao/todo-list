@@ -7,6 +7,7 @@ import (
 	"github.com/YangzhenZhao/todo-list/logic/todo"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 var logger = log.Logger
@@ -18,7 +19,9 @@ func GetTodolist(c *gin.Context) {
 func CreateTodo(c *gin.Context) {
 	createReq := &dto.CreateTodoRequest{}
 	if err := unmarshalRequest(c, createReq); err != nil {
-		logger.Info("createTodo request err: %v\n", err)
+		logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Info("createTodo request")
 		response.InvalidArgumentResponse(c, "参数不合法")
 		return
 	}
@@ -34,7 +37,9 @@ func CreateTodo(c *gin.Context) {
 		return
 	}
 
-	logger.Info("[CreateTodo] req: %s\n", spew.Sdump(createReq))
+	logger.WithFields(logrus.Fields{
+		"req": spew.Sdump(createReq),
+	}).Info("[CreateTodo]")
 
 	err := todo.CreateTodo(createReq)
 	if err != nil {
