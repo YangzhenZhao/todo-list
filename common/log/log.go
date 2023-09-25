@@ -10,7 +10,7 @@ var Logger *logrus.Logger
 func InitLogger() {
 	logger := logrus.New()
 	logger.SetOutput(&lumberjack.Logger{
-		Filename: "/Users/nocilantro/todo-list/logs/todo.log",
+		Filename: "../../logs/todo.log",
 		MaxSize:  2,  // MB
 		MaxAge:   28, //days
 	})
