@@ -1,8 +1,7 @@
 package dao
 
 import (
-	"log"
-
+	"github.com/YangzhenZhao/todo-list/common/log"
 	"github.com/YangzhenZhao/todo-list/models"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -36,7 +35,7 @@ func (impl *userDaoImpl) CreateUser(email, password string) error {
 	}
 	result := impl.db.Create(user)
 	if result.Error != nil || result.RowsAffected == 0 {
-		log.Printf("create user failed, err:%v", result.Error)
+		log.Logger.Warn("create user failed, err:%v", result.Error)
 		return result.Error
 	}
 	return nil

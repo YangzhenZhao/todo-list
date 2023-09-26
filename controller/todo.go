@@ -10,8 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var logger = log.Logger
-
 func GetTodolist(c *gin.Context) {
 
 }
@@ -19,7 +17,7 @@ func GetTodolist(c *gin.Context) {
 func CreateTodo(c *gin.Context) {
 	createReq := &dto.CreateTodoRequest{}
 	if err := unmarshalRequest(c, createReq); err != nil {
-		logger.WithFields(logrus.Fields{
+		log.Logger.WithFields(logrus.Fields{
 			"err": err,
 		}).Info("createTodo request")
 		response.InvalidArgumentResponse(c, "参数不合法")
@@ -27,24 +25,22 @@ func CreateTodo(c *gin.Context) {
 	}
 	tokenUserID, exists := c.Get("userID")
 	if !exists {
-		logger.Info("createTodo token don't have userID\n")
+		log.Logger.Info("createTodo token don't have userID\n")
 		response.InvalidArgumentResponse(c, "token不合法")
 		return
 	}
 	if createReq.UserID != tokenUserID {
-		logger.Info("createTodo invalid userID, createReq.UserID:%d, tokenUserID:%d\n", createReq.UserID, tokenUserID)
+		log.Logger.Info("createTodo invalid userID, createReq.UserID:%d, tokenUserID:%d\n", createReq.UserID, tokenUserID)
 		response.InvalidArgumentResponse(c, "token不合法")
 		return
 	}
 
-	logger.WithFields(logrus.Fields{
-		"req": spew.Sdump(createReq),
-	}).Info("[CreateTodo]")
+	log.Logger.Info("[CreateTodo] req:%s", spew.Sdump(createReq))
 
 	err := todo.CreateTodo(createReq)
 	if err != nil {
 		response.InternalServerErrorResponse(c, err.Error())
-		logger.Info("createTodo internal server error: %v\n", err)
+		log.Logger.Info("createTodo internal server error: %v\n", err)
 		return
 	}
 
