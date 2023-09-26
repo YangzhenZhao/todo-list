@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/YangzhenZhao/todo-list/common/log"
 	"github.com/YangzhenZhao/todo-list/common/response"
 	"github.com/YangzhenZhao/todo-list/dto"
 	"github.com/YangzhenZhao/todo-list/logic/todo"
@@ -17,7 +16,7 @@ func GetTodolist(c *gin.Context) {
 func CreateTodo(c *gin.Context) {
 	createReq := &dto.CreateTodoRequest{}
 	if err := unmarshalRequest(c, createReq); err != nil {
-		log.Logger.WithFields(logrus.Fields{
+		logger.WithFields(logrus.Fields{
 			"err": err,
 		}).Info("createTodo request")
 		response.InvalidArgumentResponse(c, "参数不合法")
@@ -25,22 +24,22 @@ func CreateTodo(c *gin.Context) {
 	}
 	tokenUserID, exists := c.Get("userID")
 	if !exists {
-		log.Logger.Info("createTodo token don't have userID\n")
+		logger.Info("createTodo token don't have userID\n")
 		response.InvalidArgumentResponse(c, "token不合法")
 		return
 	}
 	if createReq.UserID != tokenUserID {
-		log.Logger.Info("createTodo invalid userID, createReq.UserID:%d, tokenUserID:%d\n", createReq.UserID, tokenUserID)
+		logger.Info("createTodo invalid userID, createReq.UserID:%d, tokenUserID:%d\n", createReq.UserID, tokenUserID)
 		response.InvalidArgumentResponse(c, "token不合法")
 		return
 	}
 
-	log.Logger.Info("[CreateTodo] req:%s", spew.Sdump(createReq))
+	logger.Info("[CreateTodo] req:%s", spew.Sdump(createReq))
 
 	err := todo.CreateTodo(createReq)
 	if err != nil {
 		response.InternalServerErrorResponse(c, err.Error())
-		log.Logger.Info("createTodo internal server error: %v\n", err)
+		logger.Info("createTodo internal server error: %v\n", err)
 		return
 	}
 

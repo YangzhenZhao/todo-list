@@ -10,7 +10,7 @@ var router *gin.Engine
 
 func InitRouters() {
 	gin.SetMode(gin.ReleaseMode)
-	gin.DefaultWriter = log.Logger.Out
+	gin.DefaultWriter = log.NewLogger().Out
 
 	router = gin.Default()
 	v1 := router.Group("/v1")

@@ -8,17 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var logger = log.NewLogger()
+
 func Register(c *gin.Context) {
 	registerReq := &dto.RegisterRequest{}
 	if err := unmarshalRequest(c, registerReq); err != nil {
-		log.Logger.Info("register request... err: %v\n", err)
+		logger.Info("register request... err: %v\n", err)
 		response.InvalidArgumentResponse(c, "注册参数不合法")
 		return
 	}
 
 	err := user.CreateUser(registerReq.Email, registerReq.Password)
 	if err != nil {
-		log.Logger.Info("[Register] create user err: %v\n", err)
+		logger.Info("[Register] create user err: %v\n", err)
 		c.JSON(400, err.Error())
 		return
 	}
@@ -28,7 +30,7 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	loginReq := &dto.LoginRequest{}
 	if err := unmarshalRequest(c, loginReq); err != nil {
-		log.Logger.Info("login request... err: %v\n", err)
+		logger.Info("login request... err: %v\n", err)
 		response.InvalidArgumentResponse(c, "登录参数不合法")
 		return
 	}

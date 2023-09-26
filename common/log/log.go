@@ -1,27 +1,27 @@
 package log
 
 import (
-	"log"
-
 	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var Logger *logrus.Logger
+var logger *logrus.Logger
 
-func InitLogger() {
-	logger := logrus.New()
-	logger.SetOutput(&lumberjack.Logger{
-		Filename:  "/Users/nocilantro/todo-list/logs/todo.log",
+func NewLogger() *logrus.Logger {
+	if logger != nil {
+		return logger
+	}
+	newLogger := logrus.New()
+	newLogger.SetOutput(&lumberjack.Logger{
+		Filename:  "/home/ubuntu/todo-list/logs/todo.log",
 		MaxSize:   1, // MB
 		LocalTime: true,
 		MaxAge:    28, //days
 	})
 
-	Logger = logger
-	if Logger == nil {
-		log.Printf("invalid logger!!!")
-	} else {
-		Logger.Info("Init Logger success")
+	logger = newLogger
+	if logger == nil {
+		panic("Init logger failed!!!")
 	}
+	return logger
 }
