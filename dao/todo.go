@@ -8,6 +8,7 @@ import (
 
 type ITodoDao interface {
 	CreateTodo(todo *dto.CreateTodoRequest) (uint, error)
+	DeleteTodo(todoID uint) error
 }
 
 var TodoDao ITodoDao
@@ -35,6 +36,15 @@ func (impl *todoDaoImpl) CreateTodo(todo *dto.CreateTodoRequest) (uint, error) {
 	}
 	logger.Info("[dao CreateTodo] todoID:", todoModel.ID)
 	return todoModel.ID, nil
+}
+
+func (impl *todoDaoImpl) DeleteTodo(todoID uint) error {
+	result := impl.db.Delete(&models.Todo{}, todoID)
+	if result.Error != nil {
+		logger.Warn("[DeleteTodo] err:", result.Error)
+		return result.Error
+	}
+	return nil
 }
 
 func NewTodoDao(db *gorm.DB) ITodoDao {

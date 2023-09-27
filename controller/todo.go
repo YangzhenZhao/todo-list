@@ -6,7 +6,6 @@ import (
 	"github.com/YangzhenZhao/todo-list/logic/todo"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func GetTodolist(c *gin.Context) {
@@ -16,21 +15,12 @@ func GetTodolist(c *gin.Context) {
 func CreateTodo(c *gin.Context) {
 	createReq := &dto.CreateTodoRequest{}
 	if err := unmarshalRequest(c, createReq); err != nil {
-		logger.WithFields(logrus.Fields{
-			"err": err,
-		}).Info("createTodo request")
+		logger.Info("createTodo request, err:", err)
 		response.InvalidArgumentResponse(c, "参数不合法")
 		return
 	}
-	tokenUserID, exists := c.Get("userID")
-	if !exists {
-		logger.Info("createTodo token don't have userID\n")
-		response.InvalidArgumentResponse(c, "token不合法")
-		return
-	}
-	if createReq.UserID != tokenUserID {
-		logger.Info("createTodo invalid userID, createReq.UserID, tokenUserID", createReq.UserID, tokenUserID)
-		response.InvalidArgumentResponse(c, "token不合法")
+
+	if !validteToken(c, createReq.UserID, "CreateTodo") {
 		return
 	}
 
@@ -54,7 +44,25 @@ func UpdateTodo(c *gin.Context) {
 }
 
 func DeleteTodo(c *gin.Context) {
+	delReq := &dto.DeleteTodoRequest{}
+	if err := unmarshalRequest(c, delReq); err != nil {
+		logger.Info("DeleteTodo request, err:", err)
+		response.InvalidArgumentResponse(c, "参数不合法")
+		return
+	}
 
+	if !validteToken(c, delReq.UserID, "DeleteTodo") {
+		return
+	}
+
+	err := todo.DeleteTodo(delReq.TodoID)
+	if err != nil {
+		response.InternalServerErrorResponse(c, err.Error())
+		logger.Info("deleteTodo internal server error", err)
+		return
+	}
+
+	response.SuccessResponse(c, "", "删除成功")
 }
 
 func GetTodo(c *gin.Context) {

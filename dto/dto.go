@@ -45,3 +45,8 @@ func (res *CreateTodoResponse) JsonDumps() string {
 	dumpsRes, _ := json.Marshal(res)
 	return string(dumpsRes)
 }
+
+type DeleteTodoRequest struct {
+	UserID uint `json:"userID"`
+	TodoID uint `json:"todoID"`
+}
