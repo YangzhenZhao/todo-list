@@ -29,21 +29,24 @@ func CreateTodo(c *gin.Context) {
 		return
 	}
 	if createReq.UserID != tokenUserID {
-		logger.Info("createTodo invalid userID, createReq.UserID:%d, tokenUserID:%d\n", createReq.UserID, tokenUserID)
+		logger.Info("createTodo invalid userID, createReq.UserID, tokenUserID", createReq.UserID, tokenUserID)
 		response.InvalidArgumentResponse(c, "token不合法")
 		return
 	}
 
-	logger.Info("[CreateTodo] req:%s", spew.Sdump(createReq))
+	logger.Info("[CreateTodo] req", spew.Sdump(createReq))
 
-	err := todo.CreateTodo(createReq)
+	todoID, err := todo.CreateTodo(createReq)
 	if err != nil {
 		response.InternalServerErrorResponse(c, err.Error())
-		logger.Info("createTodo internal server error: %v\n", err)
+		logger.Info("createTodo internal server error", err)
 		return
 	}
 
-	response.SuccessResponse(c, "", "创建成功")
+	createTodoRes := &dto.CreateTodoResponse{
+		TodoID: todoID,
+	}
+	response.SuccessResponse(c, createTodoRes.JsonDumps(), "创建成功")
 }
 
 func UpdateTodo(c *gin.Context) {

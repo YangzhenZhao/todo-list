@@ -20,7 +20,7 @@ func Register(c *gin.Context) {
 
 	err := user.CreateUser(registerReq.Email, registerReq.Password)
 	if err != nil {
-		logger.Info("[Register] create user err: %v\n", err)
+		logger.Info("[Register] create user err: ", err)
 		c.JSON(400, err.Error())
 		return
 	}
@@ -30,7 +30,7 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	loginReq := &dto.LoginRequest{}
 	if err := unmarshalRequest(c, loginReq); err != nil {
-		logger.Info("login request... err: %v\n", err)
+		logger.Info("login request... err: ", err)
 		response.InvalidArgumentResponse(c, "登录参数不合法")
 		return
 	}

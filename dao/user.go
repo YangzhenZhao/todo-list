@@ -34,7 +34,7 @@ func (impl *userDaoImpl) CreateUser(email, password string) error {
 	}
 	result := impl.db.Create(user)
 	if result.Error != nil || result.RowsAffected == 0 {
-		logger.Warn("create user failed, err:%v", result.Error)
+		logger.Warn("create user failed, err:", result.Error)
 		return result.Error
 	}
 	return nil

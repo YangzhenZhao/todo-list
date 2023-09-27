@@ -36,3 +36,12 @@ type CreateTodoRequest struct {
 	Priority    string    `json:"priority"`
 	Location    string    `json:"location"`
 }
+
+type CreateTodoResponse struct {
+	TodoID uint `json:"todoID"`
+}
+
+func (res *CreateTodoResponse) JsonDumps() string {
+	dumpsRes, _ := json.Marshal(res)
+	return string(dumpsRes)
+}

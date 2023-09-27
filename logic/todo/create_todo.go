@@ -5,6 +5,6 @@ import (
 	"github.com/YangzhenZhao/todo-list/dto"
 )
 
-func CreateTodo(todo *dto.CreateTodoRequest) error {
+func CreateTodo(todo *dto.CreateTodoRequest) (uint, error) {
 	return dao.TodoDao.CreateTodo(todo)
 }
