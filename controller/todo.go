@@ -55,6 +55,8 @@ func DeleteTodo(c *gin.Context) {
 		return
 	}
 
+	logger.Info("[DeleteTodo] req:", spew.Sdump(delReq))
+
 	err := todo.DeleteTodo(delReq.TodoID)
 	if err != nil {
 		response.InternalServerErrorResponse(c, err.Error())
