@@ -50,3 +50,8 @@ type DeleteTodoRequest struct {
 	UserID uint `json:"userID"`
 	TodoID uint `json:"todoID"`
 }
+
+type SetStarRequest struct {
+	UserID uint `json:"userID"`
+	TodoID uint `json:"todoID"`
+}

@@ -20,6 +20,15 @@ func unmarshalRequest(c *gin.Context, v any) error {
 	return json.Unmarshal(body, v)
 }
 
+func validteReq(c *gin.Context, v any, funcName string) bool {
+	if err := unmarshalRequest(c, v); err != nil {
+		logger.Info(funcName, " request, err:", err)
+		response.InvalidArgumentResponse(c, "参数不合法")
+		return false
+	}
+	return true
+}
+
 func validteToken(c *gin.Context, reqUserID uint, funcName string) bool {
 	tokenUserID, exists := c.Get("userID")
 	if !exists {

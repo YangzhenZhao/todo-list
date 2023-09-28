@@ -9,6 +9,8 @@ import (
 type ITodoDao interface {
 	CreateTodo(todo *dto.CreateTodoRequest) (uint, error)
 	DeleteTodo(todoID uint) error
+	Star(todoID uint) error
+	Unstar(todoID uint) error
 }
 
 var TodoDao ITodoDao
@@ -42,6 +44,24 @@ func (impl *todoDaoImpl) DeleteTodo(todoID uint) error {
 	result := impl.db.Delete(&models.Todo{}, todoID)
 	if result.Error != nil {
 		logger.Warn("[DeleteTodo] err:", result.Error)
+		return result.Error
+	}
+	return nil
+}
+
+func (impl *todoDaoImpl) Star(todoID uint) error {
+	result := impl.db.Model(&models.Todo{}).Where("id = ?", todoID).Update("is_star", true)
+	if result.Error != nil {
+		logger.Warn("[Star] err:", result.Error)
+		return result.Error
+	}
+	return nil
+}
+
+func (impl *todoDaoImpl) Unstar(todoID uint) error {
+	result := impl.db.Model(&models.Todo{}).Where("id = ?", todoID).Update("is_star", false)
+	if result.Error != nil {
+		logger.Warn("[untar] err:", result.Error)
 		return result.Error
 	}
 	return nil
