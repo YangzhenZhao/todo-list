@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/YangzhenZhao/todo-list/common/monitor"
 	"github.com/YangzhenZhao/todo-list/common/response"
 	"github.com/YangzhenZhao/todo-list/dto"
 	"github.com/YangzhenZhao/todo-list/logic/todo"
@@ -86,6 +87,8 @@ func StarTodo(c *gin.Context) {
 		logger.Info(funcName, " internal server error", err)
 		return
 	}
+
+	monitor.StarCounter.Inc()
 
 	response.SuccessResponse(c, "", "star成功")
 }
